@@ -12,6 +12,11 @@ namespace MainScript
 {
     public class PlayFabManager : MonoBehaviour
     {
+        [Header("Leaderboard Options")]
+        public GameObject rowPrefab;
+        public Transform rowsParent;
+        [SerializeField] private GameObject leaderboardLoading;
+        [Header("UI Options")]
         public GameObject StartMenu;
         public GameObject UsernameUI;
         public GameObject LoginUI;
@@ -22,6 +27,7 @@ namespace MainScript
         public TextMeshProUGUI UsernameMsg;
         public TextMeshProUGUI FeedbackMsg;
         public TextMeshProUGUI displayname;
+        [Header("Others")]
         public Text PlayerName;
         public TextMeshProUGUI registeredEmail;
         public TextMeshProUGUI playertitleid;
@@ -278,6 +284,11 @@ namespace MainScript
 
         public void GetTotalScore()
         {
+            // foreach (Transform item in rowsParent)
+            // {
+            //     Destroy(item.gameObject);
+            // }
+            // leaderboardLoading.SetActive(true);
             var request = new GetLeaderboardRequest
             {
                 StatisticName = "Nyx Adventure total score points",
@@ -294,10 +305,21 @@ namespace MainScript
 
         public void OnLeaderBoardGet(GetLeaderboardResult result)
         {
+            foreach (Transform item in rowsParent)
+            {
+                Destroy(item.gameObject);
+            }
             Debug.Log("PlayFab Leaderboard retrieved!");
+            // leaderboardLoading.SetActive(false);
             foreach (var item in result.Leaderboard)
             {
-                Debug.Log("Player Position: " + item.Position + ", Player ID: " + item.PlayFabId + ", Player Name: " + item.DisplayName + ", Player Score: " + item.StatValue);
+                GameObject ScoreTile = Instantiate(rowPrefab, rowsParent);
+                TextMeshProUGUI[] texts = ScoreTile.GetComponentsInChildren<TextMeshProUGUI>();
+                texts[0].text = (item.Position + 1).ToString();
+                texts[1].text = item.PlayFabId;
+                texts[2].text = item.DisplayName;
+                texts[3].text = item.StatValue.ToString();
+                // Debug.Log("Player Position: " + item.Position + 1 + ", Player ID: " + item.PlayFabId + ", Player Name: " + item.DisplayName + ", Player Score: " + item.StatValue);
             }
         }
         public void SubmitFeedback()
