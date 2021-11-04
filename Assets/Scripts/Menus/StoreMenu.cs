@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StoreMenu : MonoBehaviour
+namespace MainScript
 {
-    public void OnClick_Back()
+    public class StoreMenu : MonoBehaviour
     {
-        MenuManager.OpenMenu(Menu.Main_Menu, this.gameObject);
+        public void OnClick_Back()
+        {
+            MenuManager.OpenMenu(Menu.Main_Menu, this.gameObject);
+        }
     }
 }

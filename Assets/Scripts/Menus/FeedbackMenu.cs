@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FeedbackMenu : MonoBehaviour
+namespace MainScript
 {
-    public void OnClick_Cancel()
+    public class FeedbackMenu : MonoBehaviour
     {
-        MenuManager.OpenMenu(Menu.Main_Menu, this.gameObject);
+        public void OnClick_Cancel()
+        {
+            MenuManager.OpenMenu(Menu.Main_Menu, this.gameObject);
+        }
     }
 }

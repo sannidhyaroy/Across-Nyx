@@ -1,9 +1,12 @@
-public enum Menu
+namespace MainScript
 {
-    Main_Menu,
-    Options,
-    Store,
-    Leaderboard,
-    User_Profile,
-    FeedbackForm,
+    public enum Menu
+    {
+        Main_Menu,
+        Options,
+        Store,
+        Leaderboard,
+        User_Profile,
+        FeedbackForm,
+    }
 }
