@@ -165,7 +165,8 @@ namespace MainScript
             {
                 displayname.text = "Username: " + playerid;
                 PlayerName.text = playerid;
-                StartMenu.SetActive(true);
+                // StartMenu.SetActive(true);
+                SceneManager.LoadScene("Main Menu");
             }
             //FindObjectOfType<CollectablesManager>().RestoreCoins();
             //FindObjectOfType<CollectablesManager>().RestoreGems();
@@ -250,14 +251,15 @@ namespace MainScript
             LoadingUI.SetActive(false);
             Debug.Log("Display Name updated!");
             UsernameUI.SetActive(false);
-            StartMenu.SetActive(true);
+            // StartMenu.SetActive(true);
+            SceneManager.LoadScene("Main Menu");
         }
 
         public void LogOutButton()
         {
             PlayFabClientAPI.ForgetAllCredentials();
             ScriptAttemptManager.ScriptAttempts = false;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            SceneManager.LoadScene("Home");
         }
 
         public void MessageClear()

@@ -15,12 +15,10 @@ namespace MainScript
             LeaderboardMenu = canvas.transform.Find("Leaderboard Panel").gameObject;
             UserProfileMenu = canvas.transform.Find("User Profile Panel").gameObject;
             FeedbackMenu = canvas.transform.Find("Feedback Form Panel").gameObject;
-
-            isInitialised = true;
         }
         public static void OpenMenu(Menu menu, GameObject callingMenu, bool activateCharacter = true)
         {
-            if (!isInitialised)
+            if (!MainMenu)
             {
                 Init();
             }
@@ -46,7 +44,7 @@ namespace MainScript
                     break;
             }
             callingMenu.SetActive(false);
-            GameObject.Find("Main Camera").GetComponent<UpdateCheck>().Character.SetActive(activateCharacter);
+            // GameObject.Find("Main Camera").GetComponent<UpdateCheck>().Character.SetActive(activateCharacter);
         }
     }
 }

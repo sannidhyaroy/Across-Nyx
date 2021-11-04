@@ -11,16 +11,6 @@ namespace MainScript
         public Animator animator;
         public GameObject StartMenu;
         public GameObject OptionsMenu;
-        public GameObject OptionsButton;
-        public GameObject UserProfileUI;
-        public GameObject UserProfileButton;
-        public GameObject UserProfileExitButton;
-        public GameObject CoinStackUI;
-        public GameObject GemStackUI;
-        public GameObject StoreUI;
-        public GameObject LeaderboardUI;
-        public GameObject FeedbackFormButton;
-        public GameObject FeedbackFormUI;
 
         private void Awake()
         {
@@ -39,47 +29,6 @@ namespace MainScript
             PlayerPrefs.SetInt("cheatbuttonstatus", 0);
             SceneManager.LoadScene(lastscene);
         }
-
-        public void OnUserProfileButtonClick()
-        {
-            UserProfileExitButton.SetActive(true);
-            UserProfileButton.SetActive(false);
-            StartMenu.SetActive(false);
-            OptionsMenu.SetActive(false);
-            OptionsButton.SetActive(false);
-            CoinStackUI.SetActive(false);
-            GemStackUI.SetActive(false);
-            FeedbackFormButton.SetActive(false);
-            UserProfileUI.SetActive(true);
-            FindObjectOfType<UpdateCheck>().Character.SetActive(false);
-        }
-
-        public void OnUserProfileExitButtonClick()
-        {
-            //animator.Play("Profile Panel Exit Anim");
-            UserProfileExitButton.SetActive(false);
-            UserProfileButton.SetActive(true);
-            UserProfileUI.SetActive(false);
-            StartMenu.SetActive(true);
-            OptionsButton.SetActive(true);
-            CoinStackUI.SetActive(true);
-            GemStackUI.SetActive(true);
-            FeedbackFormButton.SetActive(true);
-            FindObjectOfType<UpdateCheck>().Character.SetActive(true);
-        }
-        public void ExitProfileEvent()
-        {
-            UserProfileExitButton.SetActive(false);
-            UserProfileButton.SetActive(true);
-            UserProfileUI.SetActive(false);
-            StartMenu.SetActive(true);
-            OptionsButton.SetActive(true);
-            CoinStackUI.SetActive(true);
-            GemStackUI.SetActive(true);
-            FeedbackFormButton.SetActive(true);
-            FindObjectOfType<UpdateCheck>().Character.SetActive(true);
-        }
-
         public void Options()
         {
             if (!OptionsMenu.activeInHierarchy)
@@ -119,38 +68,6 @@ namespace MainScript
         public void StartMenuDisable()
         {
             StartMenu.SetActive(false);
-        }
-        public void FeedBackFormButton()
-        {
-            StartMenu.SetActive(false);
-            OptionsButton.SetActive(false);
-            OptionsMenu.SetActive(false);
-            CoinStackUI.SetActive(false);
-            GemStackUI.SetActive(false);
-            UserProfileButton.SetActive(false);
-            UserProfileExitButton.SetActive(false);
-            FeedbackFormButton.SetActive(false);
-            FeedbackFormUI.SetActive(true);
-        }
-        public void FeedBackFormCancelButton()
-        {
-            FeedbackFormUI.SetActive(false);
-            StartMenu.SetActive(true);
-            OptionsButton.SetActive(true);
-            CoinStackUI.SetActive(true);
-            GemStackUI.SetActive(true);
-            FeedbackFormButton.SetActive(true);
-            UserProfileButton.SetActive(true);
-        }
-        public void Store()
-        {
-            StartMenu.SetActive(false);
-            StoreUI.SetActive(true);
-        }
-        public void Leaderboard()
-        {
-            StartMenu.SetActive(false);
-            LeaderboardUI.SetActive(true);
         }
     }
 }
