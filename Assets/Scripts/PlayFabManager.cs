@@ -356,6 +356,11 @@ namespace MainScript
         }
         public void SubmitFeedback()
         {
+            if (feedbackinput.text == null)
+            {
+                FeedbackMsg.text = "Feedback field is empty!";
+                return;
+            }
             var request = new ExecuteCloudScriptRequest
             {
                 FunctionName = "sendFeedback",
