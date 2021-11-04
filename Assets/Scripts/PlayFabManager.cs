@@ -319,6 +319,38 @@ namespace MainScript
                 texts[1].text = item.PlayFabId;
                 texts[2].text = item.DisplayName;
                 texts[3].text = item.StatValue.ToString();
+                if ((item.Position) <= 3)
+                {
+                    switch (item.Position + 1)
+                    {
+                        case 1:
+                            foreach (var text in texts)
+                            {
+                                text.color = new Color32(255, 215, 0, 255);
+                            }
+                            break;
+                        case 2:
+                            foreach (var text in texts)
+                            {
+                                text.color = new Color32(147, 174, 188, 255);
+                            }
+                            break;
+                        case 3:
+                            foreach (var text in texts)
+                            {
+                                text.color = new Color32(205, 127, 50, 255);
+                            }
+                            break;
+
+                    }
+                }
+                if (item.PlayFabId == PlayerPrefs.GetString("playertitleid", null))
+                {
+                    foreach (var text in texts)
+                    {
+                        text.color = new Color32(255, 138, 101, 255);
+                    }
+                }
                 // Debug.Log("Player Position: " + item.Position + 1 + ", Player ID: " + item.PlayFabId + ", Player Name: " + item.DisplayName + ", Player Score: " + item.StatValue);
             }
         }

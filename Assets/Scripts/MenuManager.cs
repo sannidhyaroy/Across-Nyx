@@ -4,7 +4,6 @@ namespace MainScript
 {
     public static class MenuManager
     {
-        public static bool isInitialised { get; private set; }
         public static GameObject MainMenu, OptionsMenu, StoreMenu, LeaderboardMenu, UserProfileMenu, FeedbackMenu;
         public static void Init()
         {
@@ -15,12 +14,10 @@ namespace MainScript
             LeaderboardMenu = canvas.transform.Find("Leaderboard Panel").gameObject;
             UserProfileMenu = canvas.transform.Find("User Profile Panel").gameObject;
             FeedbackMenu = canvas.transform.Find("Feedback Form Panel").gameObject;
-
-            isInitialised = true;
         }
         public static void OpenMenu(Menu menu, GameObject callingMenu, bool activateCharacter = true)
         {
-            if (!isInitialised)
+            if (!MainMenu)
             {
                 Init();
             }
