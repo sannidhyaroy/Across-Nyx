@@ -12,6 +12,11 @@ namespace MainScript
 {
     public class PlayFabManager : MonoBehaviour
     {
+        [Header("Leaderboard Options")]
+        public GameObject rowPrefab;
+        public Transform rowsParent;
+        [SerializeField] private GameObject leaderboardLoading;
+        [Header("UI Options")]
         public GameObject StartMenu;
         public GameObject UsernameUI;
         public GameObject LoginUI;
@@ -22,6 +27,7 @@ namespace MainScript
         public TextMeshProUGUI UsernameMsg;
         public TextMeshProUGUI FeedbackMsg;
         public TextMeshProUGUI displayname;
+        [Header("Others")]
         public Text PlayerName;
         public TextMeshProUGUI registeredEmail;
         public TextMeshProUGUI playertitleid;
@@ -30,10 +36,14 @@ namespace MainScript
         public TMP_InputField resetemailid;
         public TMP_InputField username;
         public TMP_InputField feedbackinput;
-        public string playerid = null;
+        [HideInInspector] public string playerid = null;
 
         private void Start()
         {
+            if (SceneManager.GetActiveScene().buildIndex != 0)
+            {
+                return;
+            }
             /*emailid.text = PlayerPrefs.GetString("Email ID", null); // storing sensitive information using PlayerPrefs is highly insecure
             password.text = PlayerPrefs.GetString("Password", null); // storing sensitive information using PlayerPrefs is highly insecure
 
@@ -274,6 +284,11 @@ namespace MainScript
 
         public void GetTotalScore()
         {
+            // foreach (Transform item in rowsParent)
+            // {
+            //     Destroy(item.gameObject);
+            // }
+            // leaderboardLoading.SetActive(true);
             var request = new GetLeaderboardRequest
             {
                 StatisticName = "Nyx Adventure total score points",
@@ -290,14 +305,62 @@ namespace MainScript
 
         public void OnLeaderBoardGet(GetLeaderboardResult result)
         {
+            foreach (Transform item in rowsParent)
+            {
+                Destroy(item.gameObject);
+            }
             Debug.Log("PlayFab Leaderboard retrieved!");
+            // leaderboardLoading.SetActive(false);
             foreach (var item in result.Leaderboard)
             {
-                Debug.Log("Player Position: " + item.Position + ", Player ID: " + item.PlayFabId + ", Player Name: " + item.DisplayName + ", Player Score: " + item.StatValue);
+                GameObject ScoreTile = Instantiate(rowPrefab, rowsParent);
+                TextMeshProUGUI[] texts = ScoreTile.GetComponentsInChildren<TextMeshProUGUI>();
+                texts[0].text = (item.Position + 1).ToString();
+                texts[1].text = item.PlayFabId;
+                texts[2].text = item.DisplayName;
+                texts[3].text = item.StatValue.ToString();
+                if ((item.Position) <= 3)
+                {
+                    switch (item.Position + 1)
+                    {
+                        case 1:
+                            foreach (var text in texts)
+                            {
+                                text.color = new Color32(255, 215, 0, 255);
+                            }
+                            break;
+                        case 2:
+                            foreach (var text in texts)
+                            {
+                                text.color = new Color32(147, 174, 188, 255);
+                            }
+                            break;
+                        case 3:
+                            foreach (var text in texts)
+                            {
+                                text.color = new Color32(205, 127, 50, 255);
+                            }
+                            break;
+
+                    }
+                }
+                if (item.PlayFabId == PlayerPrefs.GetString("playertitleid", null))
+                {
+                    foreach (var text in texts)
+                    {
+                        text.color = new Color32(255, 138, 101, 255);
+                    }
+                }
+                // Debug.Log("Player Position: " + item.Position + 1 + ", Player ID: " + item.PlayFabId + ", Player Name: " + item.DisplayName + ", Player Score: " + item.StatValue);
             }
         }
         public void SubmitFeedback()
         {
+            if (feedbackinput.text == null)
+            {
+                FeedbackMsg.text = "Feedback field is empty!";
+                return;
+            }
             var request = new ExecuteCloudScriptRequest
             {
                 FunctionName = "sendFeedback",

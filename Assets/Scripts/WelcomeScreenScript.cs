@@ -17,6 +17,8 @@ namespace MainScript
         public GameObject UserProfileExitButton;
         public GameObject CoinStackUI;
         public GameObject GemStackUI;
+        public GameObject StoreUI;
+        public GameObject LeaderboardUI;
         public GameObject FeedbackFormButton;
         public GameObject FeedbackFormUI;
 
@@ -139,6 +141,16 @@ namespace MainScript
             GemStackUI.SetActive(true);
             FeedbackFormButton.SetActive(true);
             UserProfileButton.SetActive(true);
+        }
+        public void Store()
+        {
+            StartMenu.SetActive(false);
+            StoreUI.SetActive(true);
+        }
+        public void Leaderboard()
+        {
+            StartMenu.SetActive(false);
+            LeaderboardUI.SetActive(true);
         }
     }
 }

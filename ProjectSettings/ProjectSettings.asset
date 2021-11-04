@@ -156,7 +156,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.NOTONCOMICS.AcrossNyxQ
-    Standalone: com.NOTONCOMICS.CubeGame
+    Standalone: com.NOTONCOMICS.AcrossNyxQ
   buildNumber:
     Standalone: 0
     iPhone: 0
