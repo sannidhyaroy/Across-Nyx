@@ -30,10 +30,14 @@ namespace MainScript
         public TMP_InputField resetemailid;
         public TMP_InputField username;
         public TMP_InputField feedbackinput;
-        public string playerid = null;
+        [HideInInspector] public string playerid = null;
 
         private void Start()
         {
+            if (SceneManager.GetActiveScene().buildIndex != 0)
+            {
+                return;
+            }
             /*emailid.text = PlayerPrefs.GetString("Email ID", null); // storing sensitive information using PlayerPrefs is highly insecure
             password.text = PlayerPrefs.GetString("Password", null); // storing sensitive information using PlayerPrefs is highly insecure
 
