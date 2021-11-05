@@ -9,6 +9,7 @@ TagManager:
   - Top Plane
   - Coin Sphere
   - Gems
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - Player
   - Collectables
   - Obstacles
-  - 
+  - Ground
   - 
   - 
   - 
