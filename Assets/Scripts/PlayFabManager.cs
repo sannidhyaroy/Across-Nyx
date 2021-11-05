@@ -7,6 +7,7 @@ using PlayFab.ClientModels;
 using Newtonsoft.Json;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 namespace MainScript
 {
@@ -16,6 +17,8 @@ namespace MainScript
         public GameObject rowPrefab;
         public Transform rowsParent;
         [SerializeField] private GameObject leaderboardLoading;
+
+
         [Header("UI Options")]
         public GameObject StartMenu;
         public GameObject UsernameUI;
@@ -26,17 +29,21 @@ namespace MainScript
         public TextMeshProUGUI ResetMsg;
         public TextMeshProUGUI UsernameMsg;
         public TextMeshProUGUI FeedbackMsg;
-        public TextMeshProUGUI displayname;
-        [Header("Others")]
+
+
+        [Header("Player Profile Details")]
         public Text PlayerName;
+        public TextMeshProUGUI displayname;
         public TextMeshProUGUI registeredEmail;
         public TextMeshProUGUI playertitleid;
+
+
+        [Header("Text Field Settings")]
         public TMP_InputField emailid;
         public TMP_InputField password;
         public TMP_InputField resetemailid;
         public TMP_InputField username;
         public TMP_InputField feedbackinput;
-        [HideInInspector] public string playerid = null;
 
         private void Start()
         {
@@ -53,6 +60,8 @@ namespace MainScript
             }*/
             PlayerPrefs.DeleteKey("Email ID"); // delete previous login details saved by PlayerPrefs as they're highly insecure
             PlayerPrefs.DeleteKey("Password"); // delete previous login details saved by PlayerPrefs as they're highly insecure
+            PlayerPrefs.DeleteKey("playertitleid");
+            PlayerPrefs.DeleteKey("displayname");
             GameData data = SaveGameData.LoadData();
             if (data != null)
             {
@@ -60,6 +69,13 @@ namespace MainScript
                 password.text = Encryption.EncryptDecrypt(data.Password, 2000);
                 ConsoleMsg.text = "Your login details are autofilled based on your previous logins. Change them if necessary!";
             }
+        }
+
+        private void InitPlayerProfile(string username, string playerid, string emailid)
+        {
+            PlayerProfile.Username = username;
+            PlayerProfile.PlayerID = playerid;
+            PlayerProfile.LoginEmailID = emailid;
         }
 
         public void RegisterButton()
@@ -82,6 +98,7 @@ namespace MainScript
 
         public void OnRegisterSuccess(RegisterPlayFabUserResult result)
         {
+            AddOrUpdateContactEmailID(emailid.text);
             LoadingUI.SetActive(false);
             Debug.Log("Registered and logged in!");
             ConsoleMsg.text = "Registered and logged in!";
@@ -104,7 +121,9 @@ namespace MainScript
         public void OnError(PlayFabError error)
         {
             LoadingUI.SetActive(false);
-            Debug.Log("Couldn't register!");
+            Debug.Log("We have encountered an error!");
+            Debug.LogWarning("Error Message: " + error.ErrorMessage);
+            Debug.LogWarning("Error Report: " + error.GenerateErrorReport());
             ConsoleMsg.text = error.ErrorMessage;
             ResetMsg.text = error.ErrorMessage;
             UsernameMsg.text = error.ErrorMessage;
@@ -114,8 +133,11 @@ namespace MainScript
                 emailid.text = null;
             }
             Invoke("MessageClear", 3);
-            password.text = null;
-            resetemailid.text = null;
+            if (error.ErrorMessage == "Invalid Input Parameters")
+            {
+                password.text = null;
+                resetemailid.text = null;
+            }
         }
 
         public void LoginButton()
@@ -127,7 +149,15 @@ namespace MainScript
                 //TitleId = "EF1D9",
                 InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
                 {
-                    GetPlayerProfile = true
+                    GetPlayerProfile = true,
+                    // ProfileConstraints = new PlayerProfileViewConstraints
+                    // {
+                    //     ShowDisplayName = true,
+                    //     ShowLastLogin = true,
+                    //     ShowCreated = true,
+                    //     ShowLinkedAccounts = true,
+                    //     ShowContactEmailAddresses = true,
+                    // },
                 }
             };
             LoadingUI.SetActive(true);
@@ -138,39 +168,49 @@ namespace MainScript
 
         public void OnLoginSuccess(LoginResult result)
         {
+            AddOrUpdateContactEmailID(emailid.text);
             LoadingUI.SetActive(false);
             Debug.Log("Logged in!");
             ConsoleMsg.text = "BOOM! You're in!!";
             Invoke("MessageClear", 3);
             LoginUI.SetActive(false);
-            registeredEmail.text = "Email ID: " + emailid.text;
-
             //PlayerPrefs.SetString("Email ID", emailid.text); // storing sensitive information using PlayerPrefs is highly insecure
             //PlayerPrefs.SetString("Password", password.text); // storing sensitive information using PlayerPrefs is highly insecure
             SaveGameData.SaveData(this);
 
             if (result.InfoResultPayload.PlayerProfile != null)
             {
-                playerid = result.InfoResultPayload.PlayerProfile.DisplayName;
-                PlayerPrefs.SetString("displayname", playerid); // storing sensitive information using PlayerPrefs is highly insecure
+                InitPlayerProfile(result.InfoResultPayload.PlayerProfile.DisplayName, result.PlayFabId, emailid.text);
             }
-            playertitleid.text = "Player ID: " + result.InfoResultPayload.PlayerProfile.PlayerId;
-            PlayerPrefs.SetString("playertitleid", result.InfoResultPayload.PlayerProfile.PlayerId);
-            if (playerid == null)
+
+            if (result.InfoResultPayload.PlayerProfile.DisplayName == null)
             {
                 UsernameUI.SetActive(true);
             }
 
             else
             {
-                displayname.text = "Username: " + playerid;
-                PlayerName.text = playerid;
+                UserProfileDataInit();
                 StartMenu.SetActive(true);
             }
             //FindObjectOfType<CollectablesManager>().RestoreCoins();
             //FindObjectOfType<CollectablesManager>().RestoreGems();
             GetProgress();
         }
+        public void AddOrUpdateContactEmailID(string email)
+        {
+            var request = new AddOrUpdateContactEmailRequest
+            {
+                EmailAddress = email,
+            };
+            PlayFabClientAPI.AddOrUpdateContactEmail(request, OnContactEmailUpdate, OnError);
+        }
+
+        private void OnContactEmailUpdate(AddOrUpdateContactEmailResult result)
+        {
+            Debug.Log("Contact Email ID added/updated successfully!");
+        }
+
         public void AnonymousLogin()
         {
             var request = new LoginWithEmailAddressRequest
@@ -266,6 +306,27 @@ namespace MainScript
             ResetMsg.text = null;
         }
 
+        public void GetCurrentPlayerProfile()
+        {
+            var request = new GetPlayerProfileRequest
+            {
+                ProfileConstraints = new PlayerProfileViewConstraints
+                {
+                    ShowDisplayName = true,
+                    ShowLastLogin = true,
+                    ShowCreated = true,
+                    ShowLinkedAccounts = true,
+                    ShowContactEmailAddresses = true,
+                },
+            };
+            PlayFabClientAPI.GetPlayerProfile(request, OnCurrentPlayerProfileReceived, OnError);
+        }
+
+        private void OnCurrentPlayerProfileReceived(GetPlayerProfileResult result)
+        {
+            Debug.Log("Current Player Profile Received!");
+        }
+
         public void SendTotalScore(int score)
         {
             var request = new UpdatePlayerStatisticsRequest
@@ -344,7 +405,7 @@ namespace MainScript
 
                     }
                 }
-                if (item.PlayFabId == PlayerPrefs.GetString("playertitleid", null))
+                if (item.PlayFabId == PlayerProfile.PlayerID)
                 {
                     foreach (var text in texts)
                     {
@@ -366,7 +427,7 @@ namespace MainScript
                 FunctionName = "sendFeedback",
                 FunctionParameter = new
                 {
-                    displayname = playerid,
+                    displayname = PlayerProfile.Username,
                     message = feedbackinput.text
                 }
             };
@@ -457,5 +518,28 @@ namespace MainScript
                 FindObjectOfType<UpdateCheck>().DataReceived();
             }
         }
+        public void UserProfileDataInit()
+        {
+            PlayerName.text = PlayerProfile.Username;
+            displayname.text = "Username: " + PlayerProfile.Username;
+            registeredEmail.text = "Email ID: " + PlayerProfile.LoginEmailID;
+            playertitleid.text = "Player ID: " + PlayerProfile.PlayerID;
+        }
+    }
+
+    public static class PlayerProfile
+    {
+        public static string Username,
+        PlayerID,
+        LoginEmailID,
+        LastLogin,
+        AccountCreated,
+        LinkedAccounts,
+        ContactEmailID,
+        AvatarURL,
+        BannedUntil,
+        Locations,
+        Memberships,
+        Statistics;
     }
 }
