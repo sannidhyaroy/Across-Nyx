@@ -62,6 +62,7 @@ namespace MainScript
         }*/
         public void InfiniteLevel()
         {
+            Time.timeScale = 1;
             if (infinitebuttonclick == 0)
             {
                 //obstacles.SetActive(false);
