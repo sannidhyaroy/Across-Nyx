@@ -61,11 +61,7 @@ namespace MainScript
             }
             WelcomeScreen.SetActive(true);
             FindObjectOfType<PlayFabManager>().GetProgress();
-            FindObjectOfType<PlayFabManager>().playertitleid.text = "Player ID: " + PlayerPrefs.GetString("playertitleid", "(Log back in to see your ID)");
-            FindObjectOfType<PlayFabManager>().displayname.text = "Username: " + PlayerPrefs.GetString("displayname");
-            FindObjectOfType<PlayFabManager>().PlayerName.text = PlayerPrefs.GetString("displayname");
-            GameData data = SaveGameData.LoadData();
-            FindObjectOfType<PlayFabManager>().registeredEmail.text = "Email ID: " + Encryption.EncryptDecrypt(data.EmailID, 500);
+            FindObjectOfType<PlayFabManager>().UserProfileDataInit();
         }
 
         /*public void Start()
