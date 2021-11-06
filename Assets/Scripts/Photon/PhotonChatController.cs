@@ -9,9 +9,18 @@ namespace MainScript
     public class PhotonChatController : MonoBehaviour, IChatClientListener
     {
         [SerializeField] private string UserID;
-        private ChatClient chatClient;
+        public ChatClient chatClient;
+        public static Action<string, string> OnRoomInvite = delegate { };
+
 
         #region Unity Methods
+        private void Awake() {
+            FriendsUIList.OnInviteFriend += HandleFriendInvite;
+        }
+        private void OnDestroy() {
+            FriendsUIList.OnInviteFriend -= HandleFriendInvite;
+        }
+
         public void StartPhotonChatService()
         {
             UserID = PlayerProfile.Username;
@@ -39,6 +48,17 @@ namespace MainScript
         {
             chatClient.SendPrivateMessage(recipient, message);
         }
+        public void HandleFriendInvite(string recipient)
+        {
+            if (string.IsNullOrEmpty(PhotonNetwork.CurrentRoom.Name))
+            {
+                Debug.LogWarning("You need to create or join a room to invite a friend!");
+                FindObjectOfType<PlayFabFriendController>().ErrorMsg.text = "You need to create or join a room to invite a friend!";
+                FindObjectOfType<MultiplayerErrorMsg>().ErrorClearer();
+                return;
+            }
+            chatClient.SendPrivateMessage(recipient, PhotonNetwork.CurrentRoom.Name);
+        }
         #endregion
 
         #region Photon Chat Callbacks
@@ -55,7 +75,7 @@ namespace MainScript
         public void OnConnected()
         {
             Debug.Log("Connected to the Photon Chat Server");
-            SendDirectMessage("Sanhita", "Hi");
+            // SendDirectMessage("Sanhita", "Hi");
         }
 
         public void OnChatStateChange(ChatState state)
@@ -73,9 +93,10 @@ namespace MainScript
                 // Channel Name format [Sender : Recipient]
                 string[] splitNames = channelName.Split(new char[] { ':' });
                 string senderName = splitNames[0];
-                if (sender.Equals(senderName, StringComparison.OrdinalIgnoreCase))
+                if (!sender.Equals(senderName, StringComparison.OrdinalIgnoreCase))
                 {
                     Debug.Log(sender + " : " + message);
+                    OnRoomInvite?.Invoke(sender, message.ToString());
                 }
             }
         }
