@@ -11,6 +11,8 @@ namespace MainScript
         [SerializeField] private string UserID;
         public ChatClient chatClient;
         public static Action<string, string> OnRoomInvite = delegate { };
+        public static Action<ChatClient> OnChatConnected = delegate { };
+        public static Action<PhotonStatus> OnStatusUpdated = delegate { };
 
 
         #region Unity Methods
@@ -70,11 +72,14 @@ namespace MainScript
         public void OnDisconnected()
         {
             Debug.Log("Disconnected from the Photon Chat Server");
+            chatClient.SetOnlineStatus(ChatUserStatus.Offline);
         }
 
         public void OnConnected()
         {
             Debug.Log("Connected to the Photon Chat Server");
+            OnChatConnected?.Invoke(chatClient);
+            chatClient.SetOnlineStatus(ChatUserStatus.Online);
             // SendDirectMessage("Sanhita", "Hi");
         }
 
@@ -111,6 +116,10 @@ namespace MainScript
 
         public void OnStatusUpdate(string user, int status, bool gotMessage, object message)
         {
+            Debug.Log($"Photon Chat OnStatusUpdate: {user} changed to {status}: {message}");
+            PhotonStatus newStatus = new PhotonStatus(user, status, (string)message);
+            Debug.Log($"Status Update for {user} and its now {status}.");
+            OnStatusUpdated?.Invoke(newStatus);
         }
 
         public void OnUserSubscribed(string channel, string user)

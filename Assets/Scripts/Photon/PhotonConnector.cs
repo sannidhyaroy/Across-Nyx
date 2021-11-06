@@ -36,6 +36,7 @@ namespace MainScript
             ro.IsOpen = true;
             ro.IsVisible = true;
             ro.MaxPlayers = 4;
+            ro.PublishUserId = true;
             PhotonNetwork.JoinOrCreateRoom(RoomName, ro, TypedLobby.Default);
         }
 

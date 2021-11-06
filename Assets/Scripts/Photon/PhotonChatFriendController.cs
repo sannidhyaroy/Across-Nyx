@@ -1,0 +1,100 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using PlayfabFriendInfo = PlayFab.ClientModels.FriendInfo;
+using System.Linq;
+using Photon.Chat;
+
+namespace MainScript
+{
+    public class PhotonChatFriendController : MonoBehaviour
+    {
+        [SerializeField] private bool initialized;
+        [SerializeField] private List<string> friendList;
+        private ChatClient chatClient;
+        public static Dictionary<string, PhotonStatus> friendStatuses;
+
+        public static Action<List<string>> OnDisplayFriends = delegate { };
+        public static Action<PhotonStatus> OnStatusUpdated = delegate { };
+
+        private void Awake()
+        {
+            friendList = new List<string>();
+            friendStatuses = new Dictionary<string, PhotonStatus>();
+
+            PlayFabFriendController.OnFriendListUpdate += HandleFriendsUpdated;
+            PhotonChatController.OnChatConnected += HandleChatConnected;
+            PhotonChatController.OnStatusUpdated += HandleStatusUpdated;
+            FriendsUIList.OnGetCurrentStatus += HandleGetCurrentStatus;
+        }
+
+        private void OnDestroy()
+        {
+            PlayFabFriendController.OnFriendListUpdate -= HandleFriendsUpdated;
+            PhotonChatController.OnChatConnected -= HandleChatConnected;
+            PhotonChatController.OnStatusUpdated -= HandleStatusUpdated;
+            FriendsUIList.OnGetCurrentStatus -= HandleGetCurrentStatus;
+        }
+
+        private void HandleFriendsUpdated(List<PlayfabFriendInfo> friends)
+        {
+            friendList = friends.Select(f => f.TitleDisplayName).ToList();
+            RemovePhotonFriends();
+            FindPhotonFriends();
+        }
+
+        private void HandleChatConnected(ChatClient client)
+        {
+            chatClient = client;
+            RemovePhotonFriends();
+            FindPhotonFriends();
+        }
+
+        private void HandleStatusUpdated(PhotonStatus status)
+        {
+            if (friendStatuses.ContainsKey(status.PlayerName))
+            {
+                friendStatuses[status.PlayerName] = status;
+            }
+            else
+            {
+                friendStatuses.Add(status.PlayerName, status);
+            }
+        }
+
+        private void HandleGetCurrentStatus(string name)
+        {
+            PhotonStatus status;
+            if (friendStatuses.ContainsKey(name))
+            {
+                status = friendStatuses[name];
+            }
+            else
+            {
+                status = new PhotonStatus(name, 0, "");
+            }
+            OnStatusUpdated?.Invoke(status);
+        }
+
+        private void RemovePhotonFriends()
+        {
+            if (friendList.Count > 0 && initialized)
+            {
+                string[] friendDisplayNames = friendList.ToArray();
+                chatClient.RemoveFriends(friendDisplayNames);
+            }
+        }
+
+        private void FindPhotonFriends()
+        {
+            if (chatClient == null) return;
+            if (friendList.Count != 0)
+            {
+                initialized = true;
+                string[] friendDisplayNames = friendList.ToArray();
+                chatClient.AddFriends(friendDisplayNames);
+            }
+            OnDisplayFriends?.Invoke(friendList);
+        }
+    }
+}
