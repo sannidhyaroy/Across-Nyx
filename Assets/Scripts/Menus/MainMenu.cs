@@ -22,6 +22,10 @@ namespace MainScript
         {
             MenuManager.OpenMenu(Menu.Leaderboard, this.gameObject, false);
         }
+        public void OnClick_Multiplayer()
+        {
+            MenuManager.OpenMenu(Menu.Multiplayer, this.gameObject);
+        }
         public void OnClick_Profile()
         {
             MenuManager.OpenMenu(Menu.User_Profile, this.gameObject, false);

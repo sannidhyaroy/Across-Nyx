@@ -4,7 +4,7 @@ namespace MainScript
 {
     public static class MenuManager
     {
-        public static GameObject MainMenu, OptionsMenu, StoreMenu, LeaderboardMenu, UserProfileMenu, FeedbackMenu;
+        public static GameObject MainMenu, OptionsMenu, StoreMenu, LeaderboardMenu, MultiplayerMenu, UserProfileMenu, FeedbackMenu;
         public static void Init()
         {
             GameObject canvas = GameObject.Find("Home Canvas");
@@ -12,6 +12,7 @@ namespace MainScript
             OptionsMenu = canvas.transform.Find("Options Panel").gameObject;
             StoreMenu = canvas.transform.Find("Store Panel").gameObject;
             LeaderboardMenu = canvas.transform.Find("Leaderboard Panel").gameObject;
+            MultiplayerMenu = canvas.transform.Find("Multiplayer Panel").gameObject;
             UserProfileMenu = canvas.transform.Find("User Profile Panel").gameObject;
             FeedbackMenu = canvas.transform.Find("Feedback Form Panel").gameObject;
         }
@@ -34,6 +35,9 @@ namespace MainScript
                     break;
                 case Menu.Leaderboard:
                     LeaderboardMenu.SetActive(true);
+                    break;
+                case Menu.Multiplayer:
+                    MultiplayerMenu.SetActive(true);
                     break;
                 case Menu.User_Profile:
                     UserProfileMenu.SetActive(true);

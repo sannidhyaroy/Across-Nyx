@@ -6,6 +6,7 @@ namespace MainScript
         Options,
         Store,
         Leaderboard,
+        Multiplayer,
         User_Profile,
         FeedbackForm,
     }
