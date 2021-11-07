@@ -55,8 +55,6 @@ namespace MainScript
             if (string.IsNullOrEmpty(PhotonNetwork.CurrentRoom.Name))
             {
                 Debug.LogWarning("You need to create or join a room to invite a friend!");
-                FindObjectOfType<PlayFabFriendController>().ErrorMsg.text = "You need to create or join a room to invite a friend!";
-                FindObjectOfType<MultiplayerErrorMsg>().ErrorClearer();
                 return;
             }
             chatClient.SendPrivateMessage(recipient, PhotonNetwork.CurrentRoom.Name);

@@ -13,8 +13,6 @@ namespace MainScript
     {
         public static Action<List<FriendInfo>> OnFriendListUpdate = delegate { };
         private List<FriendInfo> friends;
-        [Header("Assign GameObjects:")]
-        public TextMeshProUGUI ErrorMsg;
         private void Awake()
         {
             friends = new();
@@ -60,8 +58,6 @@ namespace MainScript
         private void OnError(PlayFabError error)
         {
             Debug.Log("We have encountered an error while processing your request");
-            ErrorMsg.text = error.ErrorMessage;
-            FindObjectOfType<MultiplayerErrorMsg>().ErrorClearer();
             Debug.Log("Error Report: " + error.GenerateErrorReport());
         }
 
@@ -92,7 +88,7 @@ namespace MainScript
             GetPlayFabFriends();
         }
     }
-    public class MultiplayerErrorMsg : MonoBehaviour
+    /*public class MultiplayerErrorMsg : MonoBehaviour
     {
         public static TextMeshProUGUI errorMsg = GameObject.Find("MultiplayerErrorMsg").GetComponent<TextMeshProUGUI>();
         public void ErrorClearer()
@@ -103,5 +99,5 @@ namespace MainScript
         {
             errorMsg.text = null;
         }
-    }
+    }*/
 }

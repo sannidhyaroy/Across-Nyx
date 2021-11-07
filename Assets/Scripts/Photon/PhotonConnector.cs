@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
-
+using TMPro;
 namespace MainScript
 {
     public class PhotonConnector : MonoBehaviourPunCallbacks
     {
+        public TMP_InputField RoomName;
         public static Action GetPhotonFriends = delegate { };
         public static Action OnLobbyJoined = delegate { };
         #region Unity Methods
@@ -66,13 +67,13 @@ namespace MainScript
         }
         #endregion
         #region Button Click Events
-        public void OnClick_CreateRoom(string roomName)
+        public void OnClick_CreateRoom()
         {
-            CreatePhotonRoom(roomName);
+            CreatePhotonRoom(RoomName.text);
         }
-        public void OnClick_JoinRoom(string roomName)
+        public void OnClick_JoinRoom()
         {
-            PhotonNetwork.JoinRoom(roomName);
+            PhotonNetwork.JoinRoom(RoomName.text);
         }
         public void OnClick_LeaveRoom()
         {
