@@ -85,10 +85,16 @@ namespace MainScript
 
         public void OnChatStateChange(ChatState state)
         {
+            Debug.Log($"Photon Chat OnChatStateChange: {state.ToString()}");
         }
 
         public void OnGetMessages(string channelName, string[] senders, object[] messages)
         {
+            Debug.Log($"Photon Chat OnGetMessages {channelName}");
+            for (int i = 0; i < senders.Length; i++)
+            {
+                Debug.Log($"{senders[i]} messaged: {messages[i]}");
+            }
         }
 
         public void OnPrivateMessage(string sender, object message, string channelName)
@@ -108,10 +114,20 @@ namespace MainScript
 
         public void OnSubscribed(string[] channels, bool[] results)
         {
+            Debug.Log($"Photon Chat OnSubscribed");
+            for (int i = 0; i < channels.Length; i++)
+            {
+                Debug.Log($"{channels[i]}");
+            }
         }
 
         public void OnUnsubscribed(string[] channels)
         {
+            Debug.Log($"Photon Chat OnUnsubscribed");
+            for (int i = 0; i < channels.Length; i++)
+            {
+                Debug.Log($"{channels[i]}");
+            }
         }
 
         public void OnStatusUpdate(string user, int status, bool gotMessage, object message)
@@ -124,10 +140,12 @@ namespace MainScript
 
         public void OnUserSubscribed(string channel, string user)
         {
+            Debug.Log($"Photon Chat OnUserSubscribed: {channel} {user}");
         }
 
         public void OnUserUnsubscribed(string channel, string user)
         {
+            Debug.Log($"Photon Chat OnUserUnsubscribed: {channel} {user}");
         }
         #endregion
     }

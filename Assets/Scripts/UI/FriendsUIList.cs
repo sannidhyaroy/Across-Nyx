@@ -80,6 +80,7 @@ namespace MainScript
         }
         private void SetStatus(int status)
         {
+            Debug.Log("Chat User Status: " + status);
             if (status == ChatUserStatus.Online)
             {
                 onlineImage.color = onlineColor;
@@ -92,12 +93,13 @@ namespace MainScript
                 isOnline = false;
                 inviteButton.SetActive(false);
             }
+            Debug.Log($"Online Image Color: {onlineImage.color.ToString()}");
         }
 
         private void HandleInRoom(bool inRoom)
         {
             Debug.Log($"Updating invite ui to {inRoom}");
-            inviteButton.SetActive(inRoom && isOnline);
+            inviteButton.SetActive(inRoom);
         }
 
         private void SetupUI()
