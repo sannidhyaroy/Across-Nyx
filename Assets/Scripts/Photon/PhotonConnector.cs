@@ -13,6 +13,8 @@ namespace MainScript
         public RoomItem roomItemPrefab;
         private List<RoomItem> roomItemsList = new();
         public Transform roomItemContent;
+        public float timeBetweenUpdates = 1.5f;
+        private float nextUpdateTime;
         public static Action GetPhotonFriends = delegate { };
         public static Action OnLobbyJoined = delegate { };
         #region Unity Methods
@@ -87,8 +89,12 @@ namespace MainScript
         }
         public override void OnRoomListUpdate(List<RoomInfo> roomList)
         {
-            Debug.Log("Room List Updated!");
-            UpdateRoomList(roomList);
+            if (Time.time >= nextUpdateTime)
+            {
+                Debug.Log("Room List Updated!");
+                UpdateRoomList(roomList);
+                nextUpdateTime = Time.time + timeBetweenUpdates;
+            }
         }
         #endregion
         #region Button Click Events
