@@ -4,11 +4,13 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
 using ExitGames.Client.Photon;
+using TMPro;
 
 namespace MainScript
 {
     public class PhotonRoomController : MonoBehaviourPunCallbacks
     {
+        [SerializeField] private TextMeshProUGUI RoomNameTitle;
         [SerializeField] private GameMode _selectedGameMode;
         [SerializeField] private GameMode[] _availableGameModes;
         [SerializeField] private bool _startGame;
@@ -215,17 +217,21 @@ namespace MainScript
         public override void OnJoinedRoom()
         {
             Debug.Log("Photon Room '" + PhotonNetwork.CurrentRoom.Name + "' joined successfully!");
+            RoomNameTitle.text = PhotonNetwork.CurrentRoom.Name;
             FindObjectOfType<MultiplayerMenu>().OnJoinedRoom();
+            FindObjectOfType<PhotonConnector>().UpdatePlayerList();
             DebugPlayerList();
 
             _selectedGameMode = GetRoomGameMode();
             OnJoinRoom?.Invoke(_selectedGameMode);
             OnRoomStatusChange?.Invoke(PhotonNetwork.InRoom);
+            FindObjectOfType<PhotonConnector>().RoomName.text = null;
         }
 
         public override void OnLeftRoom()
         {
             Debug.Log("Photon Room Left Successfully!");
+            RoomNameTitle.text = null;
             FindObjectOfType<MultiplayerMenu>().OnLeftRoom();
             _selectedGameMode = null;
             _startGame = false;
@@ -246,6 +252,7 @@ namespace MainScript
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
             Debug.Log(newPlayer.UserId + " has joined this room!");
+            FindObjectOfType<PhotonConnector>().UpdatePlayerList();
             DebugPlayerList();
             AutoStartGame();
         }
@@ -253,6 +260,7 @@ namespace MainScript
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
             Debug.Log(otherPlayer.UserId + " has left this room!");
+            FindObjectOfType<PhotonConnector>().UpdatePlayerList();
             OnOtherPlayerLeftRoom?.Invoke(otherPlayer);
             DebugPlayerList();
         }

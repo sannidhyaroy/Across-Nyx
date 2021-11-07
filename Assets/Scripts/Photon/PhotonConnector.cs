@@ -15,6 +15,10 @@ namespace MainScript
         public Transform roomItemContent;
         public float timeBetweenUpdates = 1.5f;
         private float nextUpdateTime;
+        public List<PlayerItem> playerItemsList = new();
+        public PlayerItem playerItemPrefab;
+        public Transform playerItemsParent;
+
         public static Action GetPhotonFriends = delegate { };
         public static Action OnLobbyJoined = delegate { };
         #region Unity Methods
@@ -64,6 +68,25 @@ namespace MainScript
                 roomItemsList.Add(newRoom);
             }
         }
+        public void UpdatePlayerList()
+        {
+            foreach (PlayerItem item in playerItemsList)
+            {
+                Destroy(item.gameObject);
+            }
+            playerItemsList.Clear();
+
+            if (!PhotonNetwork.InRoom)
+            {
+                return;
+            }
+
+            foreach (KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
+            {
+                PlayerItem newPlayerItem = Instantiate(playerItemPrefab, playerItemsParent);
+                playerItemsList.Add(newPlayerItem);
+            }
+        }
         #endregion
         #region Public Methods
         #endregion
@@ -78,7 +101,8 @@ namespace MainScript
         }
         public override void OnDisconnected(DisconnectCause cause)
         {
-            Debug.Log("Disconnected from Photon Servers\nReason: "+cause);
+            Debug.Log("Disconnected from Photon Servers\nReason: " + cause);
+            RoomName.text = null;
         }
         public override void OnJoinedLobby()
         {
@@ -90,6 +114,7 @@ namespace MainScript
         public override void OnLeftLobby()
         {
             Debug.Log("Photon Lobby Left successfully!");
+            RoomName.text = null;
         }
         public override void OnRoomListUpdate(List<RoomInfo> roomList)
         {
