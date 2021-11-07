@@ -9,7 +9,7 @@ namespace MainScript
 {
     public class FriendsUIList : MonoBehaviour
     {
-        [SerializeField] private TMP_Text friendNameText;
+        [SerializeField] private TextMeshProUGUI friendNameText;
         [SerializeField] private string friendName;
         [SerializeField] private FriendInfo friend;
         [SerializeField] private bool isOnline;
@@ -44,8 +44,32 @@ namespace MainScript
 
         public void Initialize(FriendInfo friend)
         {
-            this.friend = friend;
-            friendNameText.SetText(this.friend.UserId);
+            // if (friend.IsOnline)
+            // {
+            //     if (friend.IsInRoom)
+            //     {
+            //         Debug.Log($"{friend.UserId} is online and currently in a room named '{friend.Room}'");
+            //     }
+            //     else
+            //     {
+            //         Debug.Log($"{friend.UserId} is online and not in room");
+            //     }
+            // }
+            // else
+            // {
+            //     Debug.Log($"{friend.UserId} is currently offline");
+            // }
+            
+            SetupUI();
+        }
+        public void Initialize(string friendName)
+        {
+            Debug.Log($"{friendName} is added");
+            this.friendName = friendName;
+
+            SetupUI();
+            OnGetCurrentStatus?.Invoke(friendName);
+            OnGetRoomStatus?.Invoke();
         }
         private void HandleStatusUpdated(PhotonStatus status)
         {
@@ -79,7 +103,8 @@ namespace MainScript
 
         private void SetupUI()
         {
-            friendNameText.SetText(friendName);
+            // Debug.Log("Friend Name shall be set to " + friendName);
+            friendNameText.text = friendName;
             inviteButton.SetActive(false);
         }
         public void RemoveFriend()

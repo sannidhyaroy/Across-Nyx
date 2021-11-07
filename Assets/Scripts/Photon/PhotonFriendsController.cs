@@ -18,6 +18,7 @@ namespace MainScript
         public static Action<List<PhotonFriendInfo>> OnDisplayFriends = delegate { };
         private void Awake()
         {
+            friendList = new List<PlayFabFriendInfo>();
             PlayFabFriendController.OnFriendListUpdate += HandleFriendsUpdated;
         }
 
@@ -48,7 +49,7 @@ namespace MainScript
 
         private void FindPhotonFriends(List<PlayFabFriendInfo> friends)
         {
-            Debug.Log($"Handle getting {friends.Count} Photon friends!");
+            // Debug.Log($"Handle getting {friends.Count} Photon friends!");
             if (friends.Count != 0)
             {
                 string[] friendDisplayNames = friends.Select(f => f.TitleDisplayName).ToArray();
@@ -62,7 +63,7 @@ namespace MainScript
 
         public override void OnFriendListUpdate(List<PhotonFriendInfo> friendList)
         {
-            Debug.Log($"Invoke UI to display Photon friends found: {friendList.Count}");
+            // Debug.Log($"Invoke UI to display Photon friends found: {friendList.Count}");
             OnDisplayFriends?.Invoke(friendList);
         }
     }

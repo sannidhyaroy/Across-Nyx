@@ -87,7 +87,11 @@ namespace MainScript
 
         private void FindPhotonFriends()
         {
-            if (chatClient == null) return;
+            if (chatClient == null)
+            {
+                Debug.Log("Chat Client is empty!");
+                return;
+            }
             if (friendList.Count != 0)
             {
                 initialized = true;

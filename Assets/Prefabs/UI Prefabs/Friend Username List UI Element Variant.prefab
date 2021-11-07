@@ -7,10 +7,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -2739265397103579571, guid: ddf4e5ce3f934485d83e5af349cfc354, type: 3}
-      propertyPath: inviteButton
-      value: 
-      objectReference: {fileID: 4408948851124542675}
     - target: {fileID: 5135981888322333832, guid: ddf4e5ce3f934485d83e5af349cfc354, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -171,10 +167,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7686414139436304460, guid: ddf4e5ce3f934485d83e5af349cfc354, type: 3}
-      propertyPath: m_fontSize
-      value: 20.75
-      objectReference: {fileID: 0}
     - target: {fileID: 7686414139436304462, guid: ddf4e5ce3f934485d83e5af349cfc354, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -208,10 +200,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8661714510583903594, guid: ddf4e5ce3f934485d83e5af349cfc354, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8661714510583903594, guid: ddf4e5ce3f934485d83e5af349cfc354, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -221,8 +209,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ddf4e5ce3f934485d83e5af349cfc354, type: 3}
---- !u!1 &4408948851124542675 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 445181410645752195, guid: ddf4e5ce3f934485d83e5af349cfc354, type: 3}
-  m_PrefabInstance: {fileID: 4251998092649342288}
-  m_PrefabAsset: {fileID: 0}

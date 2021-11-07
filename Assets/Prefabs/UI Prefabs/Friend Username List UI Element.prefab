@@ -466,7 +466,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   friendNameText: {fileID: 7686414139436304460}
+  friendName: 
+  isOnline: 0
   onlineImage: {fileID: 1469579683837266954}
+  inviteButton: {fileID: 445181410645752195}
   onlineColor: {r: 0.09019608, g: 0.6509804, b: 0, a: 0}
   offlineColor: {r: 0.62352943, g: 0.62352943, b: 0.62352943, a: 0}
 --- !u!1 &7686414139436304457
@@ -563,7 +566,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34
+  m_fontSize: 20.75
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
