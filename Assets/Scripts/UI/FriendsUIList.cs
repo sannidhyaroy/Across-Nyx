@@ -25,13 +25,13 @@ namespace MainScript
         {
             PhotonChatController.OnStatusUpdated += HandleStatusUpdated;
             PhotonChatFriendController.OnStatusUpdated += HandleStatusUpdated;
-            // PhotonRoomController.OnRoomStatusChange += HandleInRoom;
+            PhotonRoomController.OnRoomStatusChange += HandleInRoom;
         }
         private void OnDestroy()
         {
             PhotonChatController.OnStatusUpdated -= HandleStatusUpdated;
             PhotonChatFriendController.OnStatusUpdated -= HandleStatusUpdated;
-            // PhotonRoomController.OnRoomStatusChange -= HandleInRoom;
+            PhotonRoomController.OnRoomStatusChange -= HandleInRoom;
         }
 
         private void OnEnable()

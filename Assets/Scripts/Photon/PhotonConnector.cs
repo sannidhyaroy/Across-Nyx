@@ -10,15 +10,13 @@ namespace MainScript
     public class PhotonConnector : MonoBehaviourPunCallbacks
     {
         public static Action GetPhotonFriends = delegate { };
+        public static Action OnLobbyJoined = delegate { };
         #region Unity Methods
         public void StartPhotonService()
         {
-            InvitesUIList.OnRoomInviteAccept += HandleRoomInviteAccept;
+            if (PhotonNetwork.IsConnectedAndReady || PhotonNetwork.IsConnected) return;
+
             ConnectToPhoton(PlayerProfile.Username);
-        }
-        private void OnDestroy()
-        {
-            InvitesUIList.OnRoomInviteAccept -= HandleRoomInviteAccept;
         }
         #endregion
         #region Private Methods
@@ -38,29 +36,6 @@ namespace MainScript
             ro.MaxPlayers = 4;
             ro.PublishUserId = true;
             PhotonNetwork.JoinOrCreateRoom(RoomName, ro, TypedLobby.Default);
-        }
-
-        private void HandleRoomInviteAccept(string roomName)
-        {
-            PlayerPrefs.SetString("PhotonRoom", roomName);
-            if (PhotonNetwork.InRoom)
-            {
-                PhotonNetwork.LeaveRoom();
-            }
-            else
-            {
-                if (PhotonNetwork.InLobby)
-                {
-                    JoinPlayerRoom();
-                }
-            }
-        }
-
-        private void JoinPlayerRoom()
-        {
-            string roomName = PlayerPrefs.GetString("PhotonRoom");
-            PlayerPrefs.SetString("PhotonRoom", null);
-            PhotonNetwork.JoinRoom(roomName);
         }
         #endregion
         #region Public Methods
@@ -83,51 +58,11 @@ namespace MainScript
             Debug.Log("Joined a Lobby successfully!");
             Debug.Log("Retrieving Friends List from PlayFab");
             GetPhotonFriends?.Invoke();
-            string roomName = PlayerPrefs.GetString("PhotonRoom");
-            if (!string.IsNullOrEmpty(roomName))
-            {
-                JoinPlayerRoom();
-            }
-            // else
-            // {
-            //     CreatePhotonRoom(PhotonNetwork.LocalPlayer.UserId+"'s Room");
-            // }
+            OnLobbyJoined?.Invoke();
         }
         public override void OnLeftLobby()
         {
             Debug.Log("Photon Lobby Left successfully!");
-        }
-        public override void OnCreatedRoom()
-        {
-            Debug.Log("Photon Room '" + PhotonNetwork.CurrentRoom.Name + "' created successfully!");
-        }
-        public override void OnLeftRoom()
-        {
-            Debug.Log("Photon Room Left Successfully!");
-        }
-        public override void OnJoinRoomFailed(short returnCode, string message)
-        {
-            Debug.Log("We have encountered an error while trying to join a Photon Room\nError Message: " + message);
-            FindObjectOfType<PlayFabFriendController>().ErrorMsg.text = "We have encountered an error while trying to join a Photon Room\nError Message: " + message;
-            FindObjectOfType<MultiplayerErrorMsg>().ErrorClearer();
-        }
-        public override void OnPlayerEnteredRoom(Player newPlayer)
-        {
-            Debug.Log(newPlayer.UserId + " has joined this room!");
-            FindObjectOfType<PlayFabFriendController>().ErrorMsg.text = newPlayer.UserId + " has joined this room!";
-            FindObjectOfType<MultiplayerErrorMsg>().ErrorClearer();
-        }
-        public override void OnPlayerLeftRoom(Player otherPlayer)
-        {
-            Debug.Log(otherPlayer.UserId + " has left this room!");
-            FindObjectOfType<PlayFabFriendController>().ErrorMsg.text = otherPlayer.UserId + " has left this room!";
-            FindObjectOfType<MultiplayerErrorMsg>().ErrorClearer();
-        }
-        public override void OnMasterClientSwitched(Player newMasterClient)
-        {
-            Debug.Log(newMasterClient.UserId + " is now the Room Admin");
-            FindObjectOfType<PlayFabFriendController>().ErrorMsg.text = newMasterClient.UserId + " is now the Room Admin";
-            FindObjectOfType<MultiplayerErrorMsg>().ErrorClearer();
         }
         #endregion
         #region Button Click Events
