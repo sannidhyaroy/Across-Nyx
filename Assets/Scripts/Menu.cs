@@ -7,6 +7,8 @@ namespace MainScript
         Store,
         Leaderboard,
         Multiplayer,
+        PhotonLobby,
+        PhotonRoom,
         User_Profile,
         FeedbackForm,
     }

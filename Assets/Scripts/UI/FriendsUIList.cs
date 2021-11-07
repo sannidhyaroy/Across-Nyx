@@ -74,7 +74,7 @@ namespace MainScript
         {
             if (string.Compare(friendName, status.PlayerName) == 0)
             {
-                Debug.Log($"Updating status in UI for {status.PlayerName} to status {status.Status}");
+                // Debug.Log($"Updating status in UI for {status.PlayerName} to status {status.Status}");
                 SetStatus(status.Status);
             }
         }

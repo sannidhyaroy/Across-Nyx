@@ -10,6 +10,9 @@ namespace MainScript
     public class PhotonConnector : MonoBehaviourPunCallbacks
     {
         public TMP_InputField RoomName;
+        public RoomItem roomItemPrefab;
+        private List<RoomItem> roomItemsList = new();
+        public Transform roomItemContent;
         public static Action GetPhotonFriends = delegate { };
         public static Action OnLobbyJoined = delegate { };
         #region Unity Methods
@@ -38,6 +41,23 @@ namespace MainScript
             ro.PublishUserId = true;
             PhotonNetwork.JoinOrCreateRoom(RoomName, ro, TypedLobby.Default);
         }
+        private void UpdateRoomList(List<RoomInfo> _roomItemsList)
+        {
+            foreach (RoomItem item in roomItemsList)
+            {
+                Destroy(item.gameObject);
+            }
+
+            roomItemsList.Clear();
+
+            foreach (RoomInfo room in _roomItemsList)
+            {
+                Debug.Log("Rooms Available: " + room.Name);
+                RoomItem newRoom = Instantiate(roomItemPrefab, roomItemContent);
+                newRoom.SetRoomName(room.Name);
+                roomItemsList.Add(newRoom);
+            }
+        }
         #endregion
         #region Public Methods
         #endregion
@@ -65,18 +85,32 @@ namespace MainScript
         {
             Debug.Log("Photon Lobby Left successfully!");
         }
+        public override void OnRoomListUpdate(List<RoomInfo> roomList)
+        {
+            Debug.Log("Room List Updated!");
+            UpdateRoomList(roomList);
+        }
         #endregion
         #region Button Click Events
         public void OnClick_CreateRoom()
         {
-            CreatePhotonRoom(RoomName.text);
+            if (RoomName.text != null)
+            {
+                CreatePhotonRoom(RoomName.text);
+            }
         }
         public void OnClick_JoinRoom()
         {
             PhotonNetwork.JoinRoom(RoomName.text);
         }
+        public void OnClick_JoinRoom(string roomName)
+        {
+            PhotonNetwork.JoinRoom(roomName);
+            PlayerPrefs.SetString("PhotonRoom", "");
+        }
         public void OnClick_LeaveRoom()
         {
+            PhotonRoomController.OnRoomLeft?.Invoke();
             PhotonNetwork.LeaveRoom();
         }
         #endregion

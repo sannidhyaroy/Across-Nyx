@@ -24,5 +24,13 @@ namespace MainScript
             }
             PhotonNetwork.Disconnect();
         }
+        public void OnJoinedRoom()
+        {
+            MenuManager.OpenMenu(Menu.PhotonRoom, MenuManager.PhotonLobby);
+        }
+        public void OnLeftRoom()
+        {
+            MenuManager.OpenMenu(Menu.PhotonLobby, MenuManager.PhotonRoom);
+        }
     }
 }

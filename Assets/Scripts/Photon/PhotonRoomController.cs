@@ -99,12 +99,12 @@ namespace MainScript
 
         private void HandleLobbyJoined()
         {
-            string roomName = PlayerProfile.Username;
-            if (!string.IsNullOrEmpty(roomName))
-            {
-                PhotonNetwork.JoinRoom(roomName);
-                PlayerPrefs.SetString("PhotonRoom", "");
-            }
+            // string roomName = PlayerProfile.Username;
+            // if (!string.IsNullOrEmpty(roomName))
+            // {
+            //     PhotonNetwork.JoinRoom(roomName);
+            //     PlayerPrefs.SetString("PhotonRoom", "");
+            // }
         }
 
         private void HandleLeaveRoom()
@@ -215,6 +215,7 @@ namespace MainScript
         public override void OnJoinedRoom()
         {
             Debug.Log("Photon Room '" + PhotonNetwork.CurrentRoom.Name + "' joined successfully!");
+            FindObjectOfType<MultiplayerMenu>().OnJoinedRoom();
             DebugPlayerList();
 
             _selectedGameMode = GetRoomGameMode();
@@ -225,6 +226,7 @@ namespace MainScript
         public override void OnLeftRoom()
         {
             Debug.Log("Photon Room Left Successfully!");
+            FindObjectOfType<MultiplayerMenu>().OnLeftRoom();
             _selectedGameMode = null;
             _startGame = false;
             OnRoomStatusChange?.Invoke(PhotonNetwork.InRoom);
