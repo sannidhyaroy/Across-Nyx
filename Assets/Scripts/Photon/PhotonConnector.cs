@@ -54,6 +54,10 @@ namespace MainScript
 
             foreach (RoomInfo room in _roomItemsList)
             {
+                if (room.RemovedFromList)
+                {
+                    return;
+                }
                 Debug.Log("Rooms Available: " + room.Name);
                 RoomItem newRoom = Instantiate(roomItemPrefab, roomItemContent);
                 newRoom.SetRoomName(room.Name);
