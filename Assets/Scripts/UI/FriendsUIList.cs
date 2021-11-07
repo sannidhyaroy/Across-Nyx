@@ -11,7 +11,6 @@ namespace MainScript
     {
         [SerializeField] private TextMeshProUGUI friendNameText;
         [SerializeField] private string friendName;
-        [SerializeField] private FriendInfo friend;
         [SerializeField] private bool isOnline;
         [SerializeField] private Image onlineImage;
         [SerializeField] private GameObject inviteButton;
@@ -109,12 +108,12 @@ namespace MainScript
         }
         public void RemoveFriend()
         {
-            OnRemoveFriend?.Invoke(friend.UserId);
+            OnRemoveFriend?.Invoke(friendName);
         }
         public void InviteFriend()
         {
-            Debug.Log(friend.UserId + "invited!");
-            OnInviteFriend?.Invoke(friend.UserId);
+            Debug.Log(friendName + "invited!");
+            OnInviteFriend?.Invoke(friendName);
         }
     }
 }
