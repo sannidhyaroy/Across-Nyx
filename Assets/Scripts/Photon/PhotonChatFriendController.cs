@@ -96,6 +96,7 @@ namespace MainScript
             {
                 initialized = true;
                 string[] friendDisplayNames = friendList.ToArray();
+                Debug.Log("Photon Friends: " + String.Join(", ", new List<string>(friendDisplayNames).ConvertAll(i => i).ToArray()));
                 chatClient.AddFriends(friendDisplayNames);
             }
             OnDisplayFriends?.Invoke(friendList);

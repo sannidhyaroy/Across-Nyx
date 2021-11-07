@@ -7,14 +7,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -2739265397103579571, guid: ddf4e5ce3f934485d83e5af349cfc354, type: 3}
-      propertyPath: onlineColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -2739265397103579571, guid: ddf4e5ce3f934485d83e5af349cfc354, type: 3}
-      propertyPath: offlineColor.a
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5135981888322333832, guid: ddf4e5ce3f934485d83e5af349cfc354, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -89,7 +81,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7686414138261510820, guid: ddf4e5ce3f934485d83e5af349cfc354, type: 3}
       propertyPath: m_Name
-      value: Friend Username List UI Element
+      value: Friend Username List UI Element Variant
       objectReference: {fileID: 0}
     - target: {fileID: 7686414138261510821, guid: ddf4e5ce3f934485d83e5af349cfc354, type: 3}
       propertyPath: m_Pivot.x

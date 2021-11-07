@@ -58,12 +58,12 @@ namespace MainScript
             // {
             //     Debug.Log($"{friend.UserId} is currently offline");
             // }
-            
+
             SetupUI();
         }
         public void Initialize(string friendName)
         {
-            Debug.Log($"{friendName} is added");
+            // Debug.Log($"{friendName} is added");
             this.friendName = friendName;
 
             SetupUI();
@@ -80,7 +80,6 @@ namespace MainScript
         }
         private void SetStatus(int status)
         {
-            Debug.Log("Chat User Status: " + status);
             if (status == ChatUserStatus.Online)
             {
                 onlineImage.color = onlineColor;
@@ -93,13 +92,11 @@ namespace MainScript
                 isOnline = false;
                 inviteButton.SetActive(false);
             }
-            Debug.Log($"Online Image Color: {onlineImage.color.ToString()}");
         }
 
         private void HandleInRoom(bool inRoom)
         {
-            Debug.Log($"Updating invite ui to {inRoom}");
-            inviteButton.SetActive(inRoom);
+            inviteButton.SetActive(inRoom && isOnline);
         }
 
         private void SetupUI()
